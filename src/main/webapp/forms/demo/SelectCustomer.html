@@ -1,0 +1,31 @@
+<form name="SelectCustomer" role="form">
+    <div class="form-group">
+        <label>Kunde</label>
+        <select class="form-control"
+                cam-variable-name="CUSTOMER_ID"
+                cam-variable-type="Integer"
+                cam-choices="AVAILABLE_CUSTOMER">
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Name</label>
+        <input type="text"
+               class="form-control"
+               cam-variable-name="CUSTOMER_NAME"
+               cam-variable-type="String"/>
+    </div>
+    <div class="form-group">
+        <label>Adresse</label>
+        <input type="text"
+               class="form-control"
+               cam-variable-name="CUSTOMER_ADDRESS"
+               cam-variable-type="String"/>
+    </div>
+    <div class="form-group">
+        <label>E-Mail</label>
+        <input type="text"
+               class="form-control"
+               cam-variable-name="CUSTOMER_MAIL"
+               cam-variable-type="String"/>
+    </div>
+</form>
