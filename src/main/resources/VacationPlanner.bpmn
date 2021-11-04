@@ -20,7 +20,7 @@
     <bpmn:intermediateCatchEvent id="Event_0udilc3">
       <bpmn:incoming>Flow_10s4y3h</bpmn:incoming>
       <bpmn:outgoing>Flow_0o2vjeh</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_04sy8b3" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_04sy8b3" messageRef="Message_0gzkrf0" />
     </bpmn:intermediateCatchEvent>
     <bpmn:userTask id="Activity_19tu0gx" name="Zeige Info zum Ergebnis des Antrags">
       <bpmn:incoming>Flow_0o2vjeh</bpmn:incoming>
@@ -173,6 +173,7 @@
       <bpmn:outgoing>Flow_04lpwe8</bpmn:outgoing>
     </bpmn:serviceTask>
   </bpmn:process>
+  <bpmn:message id="Message_0gzkrf0" name="Message_2bpu2mu" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_096lup4">
       <bpmndi:BPMNShape id="Participant_00h06ek_di" bpmnElement="Participant_00h06ek" isHorizontal="true">
