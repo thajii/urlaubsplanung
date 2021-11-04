@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoadCustomer implements JavaDelegate {
+public class LoadEmployee implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         final Connection connection = DatabaseConnection.getConnection();

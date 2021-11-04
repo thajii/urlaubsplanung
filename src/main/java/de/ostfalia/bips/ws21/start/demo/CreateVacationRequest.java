@@ -8,16 +8,16 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 
-public class CreateCustomer implements JavaDelegate {
+public class CreateVacationRequest implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         final Connection connection = DatabaseConnection.getConnection();
-        final CallableStatement max = connection.prepareCall("SELECT MAX(idM) FROM mitarbeiter");
+        final CallableStatement max = connection.prepareCall("SELECT MAX(idUA) FROM mitarbeiter");
         final ResultSet result = max.executeQuery();
         int id = !result.next() ? 0 : result.getInt(1) + 1;
         result.close();
         execution.setVariable("MITARBEITER_ID", id);
-        final String sql = "INSERT INTO mitarbeiter (idM, name, adresse, AnzahlUrlaubstage, Projekte_idP) " +
+        final String sql = "INSERT INTO urlaubsantrag (idUA, idM, adresse, AnzahlUrlaubstage, Projekte_idP) " +
                 "VALUES (?, ?, ?, ?, ?)";
         final CallableStatement statement = connection.prepareCall(sql);
         statement.setInt(1, id);

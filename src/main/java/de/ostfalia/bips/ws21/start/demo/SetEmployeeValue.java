@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class SetCustomerValue implements JavaDelegate {
+public class SetEmployeeValue implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         final Connection connection = DatabaseConnection.getConnection();

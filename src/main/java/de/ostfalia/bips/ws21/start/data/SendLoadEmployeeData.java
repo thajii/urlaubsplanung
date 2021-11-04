@@ -7,7 +7,7 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SendLoadCustomerData implements JavaDelegate {
+public class SendLoadEmployeeData implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         final Map<String, Object> data = new HashMap<>();
