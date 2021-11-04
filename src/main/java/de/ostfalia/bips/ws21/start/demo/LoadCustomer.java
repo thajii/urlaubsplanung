@@ -16,14 +16,14 @@ public class LoadCustomer implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         final Connection connection = DatabaseConnection.getConnection();
-        final PreparedStatement statement = connection.prepareStatement("SELECT * FROM kunde");
+        final PreparedStatement statement = connection.prepareStatement("SELECT * FROM mitarbeiter");
         final ResultSet resultSet = statement.executeQuery();
         final Map<Integer, String> customers = new HashMap<>();
         while(resultSet.next()) {
-            customers.put(resultSet.getInt("idKunde"), resultSet.getString("name"));
+            customers.put(resultSet.getInt("idM"), resultSet.getString("name"));
         }
-        customers.put(-1, "Kunden anlegen");
-        execution.setVariable("AVAILABLE_CUSTOMER", Variables.objectValue(customers)
+        customers.put(-1, "Mitarbeiter anlegen");
+        execution.setVariable("AVAILABLE_MITARBEITER", Variables.objectValue(customers)
                 .serializationDataFormat(Variables.SerializationDataFormats.JSON)
                 .create());
         resultSet.close();

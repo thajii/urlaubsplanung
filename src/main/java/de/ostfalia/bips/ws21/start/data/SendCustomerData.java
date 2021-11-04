@@ -11,12 +11,13 @@ public class SendCustomerData implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         final Map<String, Object> data = new HashMap<>();
-        data.put("CUSTOMER_ID", execution.getVariable("CUSTOMER_ID"));
-        data.put("CUSTOMER_NAME", execution.getVariable("CUSTOMER_NAME"));
-        data.put("CUSTOMER_ADDRESS", execution.getVariable("CUSTOMER_ADDRESS"));
-        data.put("CUSTOMER_MAIL", execution.getVariable("CUSTOMER_MAIL"));
+        data.put("MITARBEITER_ID", execution.getVariable("MITARBEITER_ID"));
+        data.put("MITARBEITER_NAME", execution.getVariable("MITARBEITER_NAME"));
+        data.put("MITARBEITER_ADDRESS", execution.getVariable("MITARBEITER_ADDRESS"));
+        data.put("MITARBEITER_URLAUBSTAGE", execution.getVariable("MITARBEITER_URLAUBSTAGE"));
+        data.put("MITARBEITER_PROJEKTE", execution.getVariable("MITARBEITER_PROJEKTE"));
         final String key = (String) execution.getVariable("DEMO_BUSINESS_KEY");
         final RuntimeService service = execution.getProcessEngineServices().getRuntimeService();
-        service.correlateMessage("Sende Kundendaten", key, data);
+        service.correlateMessage("Sende Mitarbeiterdaten", key, data);
     }
 }
