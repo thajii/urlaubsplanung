@@ -9,8 +9,8 @@
     <bpmn:messageFlow id="Flow_0dcdx53" sourceRef="Activity_0wrh35u" targetRef="Event_0udilc3" />
     <bpmn:messageFlow id="Flow_0pjkg6y" sourceRef="Activity_0vw6hc1" targetRef="Event_0udilc3" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_0fcurca" isExecutable="true">
-    <bpmn:userTask id="Activity_1m9dg2v" name="wähle Mitarbeiter*in" camunda:formKey="embedded:app:forms/demo/SelectEmployee.html">
+  <bpmn:process id="Process_0fcurca" name="Mitarbeiter*innen" isExecutable="true">
+    <bpmn:userTask id="Activity_1m9dg2v" name="wähle Mitarbeiter*in" camunda:formKey="embedded:app:forms/demo/SelectEmployee.html" camunda:assignee="demo">
       <bpmn:incoming>Flow_06vvmcf</bpmn:incoming>
       <bpmn:outgoing>Flow_0jpumcq</bpmn:outgoing>
     </bpmn:userTask>
@@ -34,7 +34,7 @@
     <bpmn:sequenceFlow id="Flow_0o2vjeh" sourceRef="Event_0udilc3" targetRef="Activity_19tu0gx" />
     <bpmn:sequenceFlow id="Flow_10s4y3h" sourceRef="Activity_022t442" targetRef="Event_0udilc3" />
     <bpmn:sequenceFlow id="Flow_0ixegp2" sourceRef="Activity_19tu0gx" targetRef="Event_0mzxy6e" />
-    <bpmn:userTask id="Activity_022t442" name="Urlaub beantragen" camunda:formKey="embedded:app:forms/demo/ApplyVacation.html">
+    <bpmn:userTask id="Activity_022t442" name="Urlaub beantragen" camunda:formKey="embedded:app:forms/demo/ApplyVacation.html" camunda:assignee="demo">
       <bpmn:incoming>Flow_0jpumcq</bpmn:incoming>
       <bpmn:outgoing>Flow_10s4y3h</bpmn:outgoing>
     </bpmn:userTask>
