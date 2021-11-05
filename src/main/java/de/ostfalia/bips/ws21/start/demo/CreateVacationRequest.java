@@ -6,25 +6,26 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 
 public class CreateVacationRequest implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         final Connection connection = DatabaseConnection.getConnection();
-        final CallableStatement max = connection.prepareCall("SELECT MAX(idUA) FROM mitarbeiter");
+        final CallableStatement max = connection.prepareCall("SELECT MAX(idUA) FROM urlaubsAntrag");
         final ResultSet result = max.executeQuery();
-        int id = !result.next() ? 0 : result.getInt(1) + 1;
+        int idUA = !result.next() ? 0 : result.getInt(1) + 1;
         result.close();
-        execution.setVariable("MITARBEITER_ID", id);
-        final String sql = "INSERT INTO urlaubsantrag (idUA, idM, adresse, AnzahlUrlaubstage, Projekte_idP) " +
+        execution.setVariable("VACATION_ID", idUA);
+        final String sql = "INSERT INTO urlaubsantrag (idUA, idM, startDatum, endDatum, idStatus) " +
                 "VALUES (?, ?, ?, ?, ?)";
         final CallableStatement statement = connection.prepareCall(sql);
-        statement.setInt(1, id);
-        statement.setString(2, execution.getVariable("MITARBEITER_NAME").toString());
-        statement.setString(3, execution.getVariable("MITARBEITER_ADDRESS").toString());
-        statement.setString(4, execution.getVariable("MITARBEITER_URLAUBSTAGE").toString());
-        statement.setString(5, execution.getVariable("MITARBEITER_PROJEKTE").toString());
+        statement.setInt(1, idUA);
+        statement.setInt(2, (int) execution.getVariable("MITARBEITER_ID"));
+        statement.setDate(3, (Date) execution.getVariable("VACATION_START"));
+        statement.setDate(4, (Date) execution.getVariable("VACATION_END"));
+        statement.setInt(5, 1);
         statement.executeUpdate();
         statement.close();
         connection.close();

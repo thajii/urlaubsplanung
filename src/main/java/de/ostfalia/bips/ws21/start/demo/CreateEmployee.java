@@ -17,14 +17,13 @@ public class CreateEmployee implements JavaDelegate {
         int id = !result.next() ? 0 : result.getInt(1) + 1;
         result.close();
         execution.setVariable("MITARBEITER_ID", id);
-        final String sql = "INSERT INTO mitarbeiter (idM, name, adresse, AnzahlUrlaubstage, Projekte_idP) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO mitarbeiter (idM, name, adresse, anzahlUrlaubstage) " +
+                "VALUES (?, ?, ?, ?)";
         final CallableStatement statement = connection.prepareCall(sql);
         statement.setInt(1, id);
         statement.setString(2, execution.getVariable("MITARBEITER_NAME").toString());
         statement.setString(3, execution.getVariable("MITARBEITER_ADDRESS").toString());
         statement.setString(4, execution.getVariable("MITARBEITER_URLAUBSTAGE").toString());
-        statement.setString(5, execution.getVariable("MITARBEITER_PROJEKTE").toString());
         statement.executeUpdate();
         statement.close();
         connection.close();

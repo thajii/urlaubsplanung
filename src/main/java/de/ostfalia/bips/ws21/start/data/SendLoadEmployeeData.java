@@ -16,6 +16,9 @@ public class SendLoadEmployeeData implements JavaDelegate {
         data.put("MITARBEITER_ADDRESS", execution.getVariable("MITARBEITER_ADDRESS"));
         data.put("MITARBEITER_URLAUBSTAGE", execution.getVariable("MITARBEITER_URLAUBSTAGE"));
         data.put("MITARBEITER_PROJEKTE", execution.getVariable("MITARBEITER_PROJEKTE"));
+        data.put("VACATION_ID", execution.getVariable("VACATION_ID"));
+        data.put("VACATION_START", execution.getVariable("VACATION_START"));
+        data.put("VACATION_END", execution.getVariable("MITARBEITER_PROJEKTE"));
         data.put("DEMO_BUSINESS_KEY", execution.getVariable("DEMO_BUSINESS_KEY"));
         final RuntimeService service = execution.getProcessEngineServices().getRuntimeService();
         service.startProcessInstanceByMessage("Lade Mitarbeiterdaten", data);
