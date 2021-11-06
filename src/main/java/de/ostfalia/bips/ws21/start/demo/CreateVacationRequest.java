@@ -23,8 +23,8 @@ public class CreateVacationRequest implements JavaDelegate {
         final CallableStatement statement = connection.prepareCall(sql);
         statement.setInt(1, idUA);
         statement.setInt(2, (int) execution.getVariable("MITARBEITER_ID"));
-        statement.setDate(3, (Date) execution.getVariable("VACATION_START"));
-        statement.setDate(4, (Date) execution.getVariable("VACATION_END"));
+        statement.setDate(3, java.sql.Date.valueOf(execution.getVariable("VACATION_START").toString()));
+        statement.setDate(4, java.sql.Date.valueOf(execution.getVariable("VACATION_END").toString()));
         statement.setInt(5, 1);
         statement.executeUpdate();
         statement.close();
