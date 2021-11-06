@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_02z9y9n" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.7.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.14.0">
+  <bpmn:collaboration id="Collaboration_0xmqoob">
+    <bpmn:participant id="Participant_00mjkbf" name="Mitarbeiter*innen (Demo)" processRef="Process_0fb5qsx" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_0fb5qsx" name="StepByStep Mitarbeiter*innen" isExecutable="true">
+    <bpmn:startEvent id="Event_0iuir92">
+      <bpmn:outgoing>Flow_1k4dmez</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1k4dmez" sourceRef="Event_0iuir92" targetRef="Activity_0r3vkr6" />
+    <bpmn:serviceTask id="Activity_0r3vkr6" name="Lade Mitarbeiter*in" camunda:class="de.ostfalia.bips.ws21.start.demo.LoadEmployee">
+      <bpmn:incoming>Flow_1k4dmez</bpmn:incoming>
+      <bpmn:outgoing>Flow_0aoaeyk</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0aoaeyk" sourceRef="Activity_0r3vkr6" targetRef="Activity_1ma8ajg" />
+    <bpmn:userTask id="Activity_1ma8ajg" name="Wähle Mitarbeiter*in" camunda:formKey="embedded:app:forms/demo/SelectEmployee.html" camunda:assignee="demo">
+      <bpmn:incoming>Flow_0aoaeyk</bpmn:incoming>
+      <bpmn:outgoing>Flow_140vsmc</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_140vsmc" sourceRef="Activity_1ma8ajg" targetRef="Activity_0c7d3x9" />
+    <bpmn:serviceTask id="Activity_0c7d3x9" name="Lade Mitarbeiterdaten" camunda:class="de.ostfalia.bips.ws21.start.demo.SetEmployeeValue">
+      <bpmn:incoming>Flow_140vsmc</bpmn:incoming>
+      <bpmn:outgoing>Flow_0yg9fdz</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Activity_06sbm66" name="Urlaub beantragen" camunda:formKey="embedded:app:forms/demo/ApplyVacation.html" camunda:assignee="demo">
+      <bpmn:incoming>Flow_0yg9fdz</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ooo2gz</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0yg9fdz" sourceRef="Activity_0c7d3x9" targetRef="Activity_06sbm66" />
+    <bpmn:sequenceFlow id="Flow_1ooo2gz" sourceRef="Activity_06sbm66" targetRef="Activity_0zhj8ij" />
+    <bpmn:sequenceFlow id="Flow_00y3keo" sourceRef="Activity_0zhj8ij" targetRef="Activity_0pf7dvk" />
+    <bpmn:userTask id="Activity_0pf7dvk" name="Urlaubsantragsdaten" camunda:formKey="embedded:app:forms/demo/ShowRequest.html" camunda:assignee="demo">
+      <bpmn:incoming>Flow_00y3keo</bpmn:incoming>
+      <bpmn:outgoing>Flow_1hw3wv8</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Activity_0zhj8ij" name="Speicher Urlaubsantrag" camunda:class="de.ostfalia.bips.ws21.start.demo.CreateVacationRequest">
+      <bpmn:incoming>Flow_1ooo2gz</bpmn:incoming>
+      <bpmn:outgoing>Flow_00y3keo</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_1h5i15x">
+      <bpmn:incoming>Flow_1hw3wv8</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1hw3wv8" sourceRef="Activity_0pf7dvk" targetRef="Event_1h5i15x" />
+  </bpmn:process>
+  <bpmn:message id="Message_1kbmsyz" name="Message_2bpu2mu" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0xmqoob">
+      <bpmndi:BPMNShape id="Participant_00mjkbf_di" bpmnElement="Participant_00mjkbf" isHorizontal="true">
+        <dc:Bounds x="160" y="79" width="2000" height="270" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1k4dmez_di" bpmnElement="Flow_1k4dmez">
+        <di:waypoint x="248" y="149" />
+        <di:waypoint x="300" y="149" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0aoaeyk_di" bpmnElement="Flow_0aoaeyk">
+        <di:waypoint x="400" y="149" />
+        <di:waypoint x="460" y="149" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0yg9fdz_di" bpmnElement="Flow_0yg9fdz">
+        <di:waypoint x="720" y="149" />
+        <di:waypoint x="780" y="149" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_140vsmc_di" bpmnElement="Flow_140vsmc">
+        <di:waypoint x="560" y="149" />
+        <di:waypoint x="620" y="149" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ooo2gz_di" bpmnElement="Flow_1ooo2gz">
+        <di:waypoint x="880" y="149" />
+        <di:waypoint x="940" y="149" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00y3keo_di" bpmnElement="Flow_00y3keo">
+        <di:waypoint x="1040" y="149" />
+        <di:waypoint x="1100" y="149" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1hw3wv8_di" bpmnElement="Flow_1hw3wv8">
+        <di:waypoint x="1200" y="149" />
+        <di:waypoint x="1262" y="149" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0iuir92_di" bpmnElement="Event_0iuir92">
+        <dc:Bounds x="212" y="131" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1eokiyj_di" bpmnElement="Activity_0r3vkr6">
+        <dc:Bounds x="300" y="109" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0wt8x1v_di" bpmnElement="Activity_1ma8ajg">
+        <dc:Bounds x="460" y="109" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0fsfrkg_di" bpmnElement="Activity_0c7d3x9">
+        <dc:Bounds x="620" y="109" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0zili5o_di" bpmnElement="Activity_06sbm66">
+        <dc:Bounds x="780" y="109" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05cg8jf_di" bpmnElement="Activity_0pf7dvk">
+        <dc:Bounds x="1100" y="109" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1g18aqa_di" bpmnElement="Activity_0zhj8ij">
+        <dc:Bounds x="940" y="109" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1h5i15x_di" bpmnElement="Event_1h5i15x">
+        <dc:Bounds x="1262" y="131" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

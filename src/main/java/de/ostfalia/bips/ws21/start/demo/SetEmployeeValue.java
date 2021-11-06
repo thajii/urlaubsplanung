@@ -19,8 +19,7 @@ public class SetEmployeeValue implements JavaDelegate {
         while(result.next()) {
             execution.setVariable("MITARBEITER_NAME", result.getString("name"));
             execution.setVariable("MITARBEITER_ADDRESS", result.getString("adresse"));
-            execution.setVariable("MITARBEITER_URLAUBSTAGE", result.getString("AnzahlUrlaubstage"));
-            execution.setVariable("MITARBEITER_PROJEKTE", result.getString("Projekte_idP"));
+            execution.setVariable("MITARBEITER_URLAUBSTAGE", result.getString("anzahlUrlaubstage"));
         }
         result.close();
         statement.close();

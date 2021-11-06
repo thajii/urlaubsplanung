@@ -1,23 +1,20 @@
 <form name="ShowInfo" role="form"> 
 	<div class="form-group">
-        <label>Bitte waehlen Sie ihren gewuenschten Urlaubszeitraum aus:</label>
+        <label>Bitte waehlen Sie ihren gewuenschten Urlaubszeitraum aus</label>
         <p>
     </div>    
     <div class="form-group">
-        <label>Start-Datum:</label>
-        <input type="date"
-               class="form-control"
-               cam-variable-name="VACATION_START"
-               cam-variable-type="DATE"
-               disabled/>
-               <p>
-    </div>
+	    <label>Start-Datum:</label>
+	    <input type="date"
+	           class="form-control"
+	           cam-variable-name="VACATION_START"
+	           cam-variable-type="Date"/>
+	</div>    
     <div class="form-group">
         <label>Ende-Datum:</label>
         <input type="date"
                class="form-control"
                cam-variable-name="VACATION_END"
-               cam-variable-type="DATE"
-               disabled/>
+               cam-variable-type="Date"/>
     </div>
 </form>
