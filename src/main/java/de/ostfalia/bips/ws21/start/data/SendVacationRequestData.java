@@ -7,7 +7,7 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SendEmployeeData implements JavaDelegate {
+public class SendVacationRequestData implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         final Map<String, Object> data = new HashMap<>();
@@ -15,12 +15,13 @@ public class SendEmployeeData implements JavaDelegate {
         data.put("MITARBEITER_NAME", execution.getVariable("MITARBEITER_NAME"));
         data.put("MITARBEITER_ADDRESS", execution.getVariable("MITARBEITER_ADDRESS"));
         data.put("MITARBEITER_URLAUBSTAGE", execution.getVariable("MITARBEITER_URLAUBSTAGE"));
-      //  data.put("MITARBEITER_PROJEKTE", execution.getVariable("MITARBEITER_PROJEKTE"));
         data.put("VACATION_ID", execution.getVariable("VACATION_ID"));
         data.put("VACATION_START", execution.getVariable("VACATION_START"));
         data.put("VACATION_END", execution.getVariable("VACATION_END"));
+        data.put("VACATION_DAYS", execution.getVariable("VACATION_DAYS"));
+        data.put("MITARBEITER_RESTURLAUB", execution.getVariable("MITARBEITER_RESTURLAUB"));
         final String key = (String) execution.getVariable("DEMO_BUSINESS_KEY");
         final RuntimeService service = execution.getProcessEngineServices().getRuntimeService();
-        service.correlateMessage("Sende Mitarbeiterdaten", key, data);
+        service.correlateMessage("Sende Urlaubsantragsdaten", key, data);
     }
 }
