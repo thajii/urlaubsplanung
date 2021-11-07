@@ -15,9 +15,9 @@ public class CalculateDaysOfVacation implements JavaDelegate {
     @Override
     
     public void execute(DelegateExecution execution) throws Exception {
+    	execution.setVariable("ANTRAGS_STATUS", "in bearbeitung");
     	LocalDate startDate = LocalDate.parse((CharSequence) execution.getVariable("VACATION_START"));
     	LocalDate endDate = LocalDate.parse((CharSequence) execution.getVariable("VACATION_END"));
-    	//int anzahl = (int)execution.getVariable("VACATION_END") - (int)execution.getVariable("VACATION_START");
     	long anzahl = ChronoUnit.DAYS.between(startDate, endDate) + 1;
     	long rest = Long.parseLong((String) execution.getVariable("MITARBEITER_URLAUBSTAGE")) - anzahl;
     	execution.setVariable("VACATION_DAYS", anzahl);

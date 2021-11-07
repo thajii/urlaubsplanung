@@ -18,6 +18,7 @@ public class SendLoadVacationRequestData implements JavaDelegate {
         data.put("VACATION_ID", execution.getVariable("VACATION_ID"));
         data.put("VACATION_START", execution.getVariable("VACATION_START"));
         data.put("VACATION_END", execution.getVariable("VACATION_END"));
+        data.put("ANTRAGS_STATUS", execution.getVariable("ANTRAGS_STATUS"));
         data.put("DEMO_BUSINESS_KEY", execution.getVariable("DEMO_BUSINESS_KEY"));
         final RuntimeService service = execution.getProcessEngineServices().getRuntimeService();
         service.startProcessInstanceByMessage("Lade Urlaubsantragsdaten", data);

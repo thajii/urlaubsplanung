@@ -18,6 +18,7 @@ public class CreateVacationRequest implements JavaDelegate {
         int idUA = !result.next() ? 0 : result.getInt(1) + 1;
         result.close();
         execution.setVariable("VACATION_ID", idUA);
+        execution.setVariable("ANTRAGS_STATUS", "offen");
         final String sql = "INSERT INTO urlaubsantrag (idUA, idM, startDatum, endDatum, idStatus) " +
                 "VALUES (?, ?, ?, ?, ?)";
         final CallableStatement statement = connection.prepareCall(sql);
