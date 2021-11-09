@@ -7,9 +7,10 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SendVacationRequestData implements JavaDelegate {
+public class SendVacationRequestDataDeclined implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
+    	execution.setVariable("ANTRAGS_STATUS", "abgelehnt");
         final Map<String, Object> data = new HashMap<>();
         data.put("MITARBEITER_ID", execution.getVariable("MITARBEITER_ID"));
         data.put("MITARBEITER_NAME", execution.getVariable("MITARBEITER_NAME"));
