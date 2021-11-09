@@ -49,5 +49,8 @@ public class CheckForCriticalArea implements JavaDelegate {
         if (critical) {
         	execution.setVariable("ANTRAGS_STATUS", "zur ueberpruefung");
         }
+        resultSet.close();
+        statement.close();
+        connection.close();
     }
 }

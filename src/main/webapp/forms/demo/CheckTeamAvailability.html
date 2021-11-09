@@ -1,0 +1,37 @@
+<form name="CheckTeamAvailability" role="form">
+    <div class="form-group">
+        <label>Name</label>
+        <input type="text"
+               class="form-control"
+               cam-variable-name="MITARBEITER_NAME"
+               cam-variable-type="String"
+               disabled/>
+    </div>
+    <div class="form-group">
+        <label>Start-Datum</label>
+        <input type="date"
+               class="form-control"
+               cam-variable-name="VACATION_START"
+               cam-variable-type="String"
+               disabled/>
+    </div>
+    <div class="form-group">
+        <label>Ende-Datum</label>
+        <input type="date"
+               class="form-control"
+               cam-variable-name="VACATION_END"
+               cam-variable-type="String"
+               disabled/>
+    </div>
+    <div class="form-group">
+	    <label>Genehmigung?</label>
+	    <select class="form-control"
+	            cam-variable-name="ANTRAGS_STATUS"
+	            cam-variable-type="String"
+	            cam-choices="AVAILABLE_STATUS">
+	    </select>
+	</div>
+    //Hier muss eine übersicht über die bereits genehmigten Urlaubsanträge von den Mitarbeitern angezeigt werden,
+    //die sich im selber Projekt befinden, wie der Antragssteller
+
+</form>
