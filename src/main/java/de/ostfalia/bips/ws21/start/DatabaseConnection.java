@@ -11,7 +11,7 @@ public class DatabaseConnection {
     // zone value if you want to utilize time zone support.
     public static final String URL = "jdbc:mysql://localhost:3306/vacationplanner?serverTimezone=UTC&useLegacyDatetimeCode=false";
     public static final String USER = "root";
-    public static final String PASSWORD = "root";
+    public static final String PASSWORD = "Start-123";
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
