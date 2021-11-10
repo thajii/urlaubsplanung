@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_02z9y9n" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.14.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_02z9y9n" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.7.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.14.0">
   <bpmn:collaboration id="Collaboration_0xmqoob">
     <bpmn:participant id="Participant_00mjkbf" name="Mitarbeiter*innen (Demo)" processRef="Process_0fb5qsx" />
     <bpmn:participant id="Participant_03znewd" name="Vorgesetzte" processRef="Process_01miz16" />
@@ -23,19 +23,6 @@
       <bpmn:incoming>Flow_0aoaeyk</bpmn:incoming>
       <bpmn:outgoing>Flow_0hemaly</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:serviceTask id="Activity_0c7d3x9" name="Lade Mitarbeiterdaten" camunda:class="de.ostfalia.bips.ws21.start.demo.SetEmployeeValue">
-      <bpmn:incoming>Flow_0h8jvh2</bpmn:incoming>
-      <bpmn:outgoing>Flow_0yg9fdz</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:userTask id="Activity_06sbm66" name="Urlaub beantragen" camunda:formKey="embedded:app:forms/demo/ApplyVacation.html" camunda:assignee="demo">
-      <bpmn:incoming>Flow_0yg9fdz</bpmn:incoming>
-      <bpmn:incoming>Flow_1fzbjij</bpmn:incoming>
-      <bpmn:outgoing>Flow_1ooo2gz</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:serviceTask id="Activity_0zhj8ij" name="Speicher Urlaubsantrag" camunda:class="de.ostfalia.bips.ws21.start.demo.CreateVacationRequest">
-      <bpmn:incoming>Flow_1ooo2gz</bpmn:incoming>
-      <bpmn:outgoing>Flow_00y3keo</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:sendTask id="Activity_19ztqj1" name="Sende Lade Urlaubsantragsdaten" camunda:class="de.ostfalia.bips.ws21.start.data.SendLoadVacationRequestData">
       <bpmn:incoming>Flow_00y3keo</bpmn:incoming>
       <bpmn:outgoing>Flow_0tqmx50</bpmn:outgoing>
@@ -52,7 +39,7 @@
       <bpmn:incoming>Flow_0j8xgd8</bpmn:incoming>
       <bpmn:outgoing>Flow_1da68eg</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_0yg9fdz" sourceRef="Activity_0c7d3x9" targetRef="Activity_06sbm66" />
+    <bpmn:sequenceFlow id="Flow_0yg9fdz" sourceRef="Activity_0c7d3x9" targetRef="Gateway_0ggggxg" />
     <bpmn:sequenceFlow id="Flow_1ooo2gz" sourceRef="Activity_06sbm66" targetRef="Activity_0zhj8ij" />
     <bpmn:sequenceFlow id="Flow_00y3keo" sourceRef="Activity_0zhj8ij" targetRef="Activity_19ztqj1" />
     <bpmn:sequenceFlow id="Flow_0tqmx50" sourceRef="Activity_19ztqj1" targetRef="Event_1465nyn" />
@@ -68,10 +55,28 @@
     <bpmn:sequenceFlow id="Flow_1rkwco0" name="Ja" sourceRef="Gateway_1wdr478" targetRef="Activity_1dyvyqn">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${MITARBEITER_ID==-1}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1fzbjij" sourceRef="Activity_1dyvyqn" targetRef="Activity_06sbm66" />
+    <bpmn:sequenceFlow id="Flow_1fzbjij" sourceRef="Activity_1dyvyqn" targetRef="Gateway_0ggggxg" />
+    <bpmn:serviceTask id="Activity_0c7d3x9" name="Lade Mitarbeiterdaten" camunda:class="de.ostfalia.bips.ws21.start.demo.SetEmployeeValue">
+      <bpmn:incoming>Flow_0h8jvh2</bpmn:incoming>
+      <bpmn:outgoing>Flow_0yg9fdz</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Activity_06sbm66" name="Urlaub beantragen" camunda:formKey="embedded:app:forms/demo/ApplyVacation.html" camunda:assignee="demo">
+      <bpmn:incoming>Flow_1z04ha5</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ooo2gz</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_0ggggxg">
+      <bpmn:incoming>Flow_0yg9fdz</bpmn:incoming>
+      <bpmn:incoming>Flow_1fzbjij</bpmn:incoming>
+      <bpmn:outgoing>Flow_1z04ha5</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1z04ha5" sourceRef="Gateway_0ggggxg" targetRef="Activity_06sbm66" />
     <bpmn:serviceTask id="Activity_1dyvyqn" name="Mitarbeiter anlegen" camunda:class="de.ostfalia.bips.ws21.start.demo.CreateEmployee">
       <bpmn:incoming>Flow_1rkwco0</bpmn:incoming>
       <bpmn:outgoing>Flow_1fzbjij</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_0zhj8ij" name="Speicher Urlaubsantrag" camunda:class="de.ostfalia.bips.ws21.start.demo.CreateVacationRequest">
+      <bpmn:incoming>Flow_1ooo2gz</bpmn:incoming>
+      <bpmn:outgoing>Flow_00y3keo</bpmn:outgoing>
     </bpmn:serviceTask>
   </bpmn:process>
   <bpmn:message id="Message_1kbmsyz" name="Lade Urlaubsantragsdaten" />
@@ -235,6 +240,54 @@
       <bpmndi:BPMNShape id="Participant_00mjkbf_di" bpmnElement="Participant_00mjkbf" isHorizontal="true">
         <dc:Bounds x="160" y="79" width="1770" height="270" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1fzbjij_di" bpmnElement="Flow_1fzbjij">
+        <di:waypoint x="810" y="260" />
+        <di:waypoint x="870" y="260" />
+        <di:waypoint x="870" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1rkwco0_di" bpmnElement="Flow_1rkwco0">
+        <di:waypoint x="650" y="174" />
+        <di:waypoint x="650" y="260" />
+        <di:waypoint x="710" y="260" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="664" y="238" width="12" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0h8jvh2_di" bpmnElement="Flow_0h8jvh2">
+        <di:waypoint x="675" y="149" />
+        <di:waypoint x="710" y="149" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="696" y="131" width="23" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0hemaly_di" bpmnElement="Flow_0hemaly">
+        <di:waypoint x="560" y="149" />
+        <di:waypoint x="625" y="149" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0j8xgd8_di" bpmnElement="Flow_0j8xgd8">
+        <di:waypoint x="1418" y="149" />
+        <di:waypoint x="1480" y="149" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1da68eg_di" bpmnElement="Flow_1da68eg">
+        <di:waypoint x="1580" y="149" />
+        <di:waypoint x="1632" y="149" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tqmx50_di" bpmnElement="Flow_0tqmx50">
+        <di:waypoint x="1320" y="149" />
+        <di:waypoint x="1382" y="149" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00y3keo_di" bpmnElement="Flow_00y3keo">
+        <di:waypoint x="1180" y="149" />
+        <di:waypoint x="1220" y="149" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ooo2gz_di" bpmnElement="Flow_1ooo2gz">
+        <di:waypoint x="1030" y="149" />
+        <di:waypoint x="1080" y="149" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0yg9fdz_di" bpmnElement="Flow_0yg9fdz">
+        <di:waypoint x="810" y="149" />
+        <di:waypoint x="845" y="149" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0aoaeyk_di" bpmnElement="Flow_0aoaeyk">
         <di:waypoint x="400" y="149" />
         <di:waypoint x="460" y="149" />
@@ -243,52 +296,9 @@
         <di:waypoint x="248" y="149" />
         <di:waypoint x="300" y="149" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0yg9fdz_di" bpmnElement="Flow_0yg9fdz">
-        <di:waypoint x="840" y="149" />
-        <di:waypoint x="900" y="149" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ooo2gz_di" bpmnElement="Flow_1ooo2gz">
-        <di:waypoint x="1000" y="149" />
-        <di:waypoint x="1060" y="149" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_00y3keo_di" bpmnElement="Flow_00y3keo">
-        <di:waypoint x="1160" y="149" />
-        <di:waypoint x="1220" y="149" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0tqmx50_di" bpmnElement="Flow_0tqmx50">
-        <di:waypoint x="1320" y="149" />
-        <di:waypoint x="1382" y="149" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1da68eg_di" bpmnElement="Flow_1da68eg">
-        <di:waypoint x="1580" y="149" />
-        <di:waypoint x="1632" y="149" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0j8xgd8_di" bpmnElement="Flow_0j8xgd8">
-        <di:waypoint x="1418" y="149" />
-        <di:waypoint x="1480" y="149" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0hemaly_di" bpmnElement="Flow_0hemaly">
-        <di:waypoint x="560" y="149" />
-        <di:waypoint x="625" y="149" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0h8jvh2_di" bpmnElement="Flow_0h8jvh2">
-        <di:waypoint x="675" y="149" />
-        <di:waypoint x="740" y="149" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="696" y="131" width="23" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1rkwco0_di" bpmnElement="Flow_1rkwco0">
-        <di:waypoint x="650" y="174" />
-        <di:waypoint x="650" y="230" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="659" y="199" width="12" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1fzbjij_di" bpmnElement="Flow_1fzbjij">
-        <di:waypoint x="700" y="270" />
-        <di:waypoint x="950" y="270" />
-        <di:waypoint x="950" y="189" />
+      <bpmndi:BPMNEdge id="Flow_1z04ha5_di" bpmnElement="Flow_1z04ha5">
+        <di:waypoint x="895" y="149" />
+        <di:waypoint x="930" y="149" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_0iuir92_di" bpmnElement="Event_0iuir92">
         <dc:Bounds x="212" y="131" width="36" height="36" />
@@ -298,15 +308,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0wt8x1v_di" bpmnElement="Activity_1ma8ajg">
         <dc:Bounds x="460" y="109" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0fsfrkg_di" bpmnElement="Activity_0c7d3x9">
-        <dc:Bounds x="740" y="109" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0zili5o_di" bpmnElement="Activity_06sbm66">
-        <dc:Bounds x="900" y="109" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1g18aqa_di" bpmnElement="Activity_0zhj8ij">
-        <dc:Bounds x="1060" y="109" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0an7166_di" bpmnElement="Activity_19ztqj1">
         <dc:Bounds x="1220" y="109" width="100" height="80" />
@@ -329,8 +330,20 @@
           <dc:Bounds x="623" y="96" width="54" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0fsfrkg_di" bpmnElement="Activity_0c7d3x9">
+        <dc:Bounds x="710" y="109" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0zili5o_di" bpmnElement="Activity_06sbm66">
+        <dc:Bounds x="930" y="109" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0ggggxg_di" bpmnElement="Gateway_0ggggxg" isMarkerVisible="true">
+        <dc:Bounds x="845" y="124" width="50" height="50" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0f9siak_di" bpmnElement="Activity_1dyvyqn">
-        <dc:Bounds x="600" y="230" width="100" height="80" />
+        <dc:Bounds x="710" y="220" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1g18aqa_di" bpmnElement="Activity_0zhj8ij">
+        <dc:Bounds x="1080" y="109" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Participant_03znewd_di" bpmnElement="Participant_03znewd" isHorizontal="true">
         <dc:Bounds x="160" y="390" width="1770" height="540" />
@@ -344,6 +357,10 @@
       <bpmndi:BPMNShape id="Lane_1dbkazb_di" bpmnElement="Lane_1dbkazb" isHorizontal="true">
         <dc:Bounds x="190" y="390" width="1740" height="220" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0h9p830_di" bpmnElement="Flow_0h9p830">
+        <di:waypoint x="400" y="450" />
+        <di:waypoint x="465" y="450" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0tyi9yr_di" bpmnElement="Flow_0tyi9yr">
         <di:waypoint x="1405" y="870" />
         <di:waypoint x="1670" y="870" />
@@ -452,10 +469,6 @@
       <bpmndi:BPMNEdge id="Flow_18yocwm_di" bpmnElement="Flow_18yocwm">
         <di:waypoint x="248" y="450" />
         <di:waypoint x="300" y="450" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0h9p830_di" bpmnElement="Flow_0h9p830">
-        <di:waypoint x="400" y="450" />
-        <di:waypoint x="465" y="450" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_11a57rq_di" bpmnElement="Activity_11a57rq">
         <dc:Bounds x="300" y="410" width="100" height="80" />
