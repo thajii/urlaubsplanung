@@ -23,7 +23,7 @@ public class CreateEmployee implements JavaDelegate {
         statement.setInt(1, id);
         statement.setString(2, execution.getVariable("MITARBEITER_NAME").toString());
         statement.setString(3, execution.getVariable("MITARBEITER_ADDRESS").toString());
-        statement.setString(4, execution.getVariable("MITARBEITER_URLAUBSTAGE").toString());
+        statement.setLong(4, (int) execution.getVariable("MITARBEITER_URLAUBSTAGE"));
         statement.executeUpdate();
         statement.close();
         connection.close();

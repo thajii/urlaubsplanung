@@ -24,7 +24,7 @@ public class CalculateDaysOfVacation implements JavaDelegate {
     	LocalDate endDate = LocalDate.parse((CharSequence) execution.getVariable("VACATION_END"));
 		Optional<List<LocalDate>> holidayList = Optional.of(CheckHolidays.holidayList());
     	long anzahl = CountBusinessDays.countBusinessDaysBetween(startDate, endDate, holidayList).size();
-    	long rest = Long.parseLong((String) execution.getVariable("MITARBEITER_URLAUBSTAGE")) - anzahl;
+    	long rest = Long.valueOf((String) execution.getVariable("MITARBEITER_URLAUBSTAGE")) - anzahl;
     	execution.setVariable("VACATION_DAYS", anzahl);
     	execution.setVariable("MITARBEITER_RESTURLAUB", rest);
     }

@@ -20,7 +20,7 @@ public class SendVacationRequestDataAccepted implements JavaDelegate {
         data.put("VACATION_START", execution.getVariable("VACATION_START"));
         data.put("VACATION_END", execution.getVariable("VACATION_END"));
         data.put("VACATION_DAYS", execution.getVariable("VACATION_DAYS"));
-        data.put("MITARBEITER_RESTURLAUB", execution.getVariable("MITARBEITER_RESTURLAUB"));
+        data.put("MITARBEITER_RESTURLAUB", ((int) execution.getVariable("MITARBEITER_RESTURLAUB")));
         data.put("ANTRAGS_STATUS", execution.getVariable("ANTRAGS_STATUS"));
         final String key = (String) execution.getVariable("DEMO_BUSINESS_KEY");
         final RuntimeService service = execution.getProcessEngineServices().getRuntimeService();
