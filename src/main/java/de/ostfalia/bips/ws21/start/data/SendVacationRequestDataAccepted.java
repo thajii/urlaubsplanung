@@ -23,6 +23,7 @@ public class SendVacationRequestDataAccepted implements JavaDelegate {
         int idStatus = !result.next() ? 0 : result.getInt(1);
         result.close();
         status.close();
+
         
         final Map<String, Object> data = new HashMap<>();
         data.put("MITARBEITER_ID", execution.getVariable("MITARBEITER_ID"));
@@ -43,6 +44,13 @@ public class SendVacationRequestDataAccepted implements JavaDelegate {
         statement.setInt(2, (int) execution.getVariable("VACATION_ID"));
         statement.executeUpdate();
         statement.close();
+        int idM = (int) execution.getVariable("MITARBEITER_ID");
+        final String sqlDays = "UPDATE mitarbeiter SET anzahlUrlaubstage = ? WHERE idM = ?";
+        final CallableStatement statementDays = connection.prepareCall(sqlDays);
+        statementDays.setInt(1, (int) (long) execution.getVariable("MITARBEITER_RESTURLAUB"));
+        statementDays.setInt(2, idM);
+        statementDays.executeUpdate();
+        statementDays.close();
         connection.close();
         
         final RuntimeService service = execution.getProcessEngineServices().getRuntimeService();
