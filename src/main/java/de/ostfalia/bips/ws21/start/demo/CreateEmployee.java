@@ -23,9 +23,27 @@ public class CreateEmployee implements JavaDelegate {
         statement.setInt(1, id);
         statement.setString(2, execution.getVariable("MITARBEITER_NAME").toString());
         statement.setString(3, execution.getVariable("MITARBEITER_ADDRESS").toString());
-        statement.setLong(4, (int) execution.getVariable("MITARBEITER_URLAUBSTAGE"));
+        statement.setString(4, execution.getVariable("MITARBEITER_URLAUBSTAGE").toString());
         statement.executeUpdate();
         statement.close();
+
+        final CallableStatement checksAus = connection.prepareCall("SET FOREIGN_KEY_CHECKS=0");
+        checksAus.execute();
+        final CallableStatement maxi = connection.prepareCall("SELECT MAX(idMP) FROM projekt_has_mitarbeiter");
+        final ResultSet resultt = maxi.executeQuery();
+        int idMP = !resultt.next() ? 0 : resultt.getInt(1) + 1;
+        resultt.close();
+        execution.setVariable("MITARBEITER_PROJEKT_ID", idMP);
+        final String sqlstatement = "INSERT INTO projekt_has_mitarbeiter (idMP, idP, idM) " +
+                "VALUES (?, ?, ?)";
+        final CallableStatement statements = connection.prepareCall(sqlstatement);
+        statements.setInt(1, idMP);
+        statements.setInt(2, (int) execution.getVariable("MITARBEITER_ID"));
+        statements.setInt(3, (int) execution.getVariable("PROJEKT_ID"));
+        statements.executeUpdate();
+        statements.close();
+        final CallableStatement checksAn = connection.prepareCall("SET FOREIGN_KEY_CHECKS=1");
+        checksAn.execute();
         connection.close();
     }
 }

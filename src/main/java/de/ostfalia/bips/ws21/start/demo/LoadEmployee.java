@@ -28,6 +28,20 @@ public class LoadEmployee implements JavaDelegate {
                 .create());
         resultSet.close();
         statement.close();
+
+
+
+        final PreparedStatement state = connection.prepareStatement("SELECT * FROM projekt");
+        final ResultSet resultSett = state.executeQuery();
+        final Map<Integer, String> projects = new HashMap<>();
+        while (resultSett.next()) {
+            projects.put(resultSett.getInt("idP"), resultSett.getString("name"));
+        }
+        execution.setVariable("AVAILABLE_PROJEKT", Variables.objectValue(projects)
+                .serializationDataFormat(Variables.SerializationDataFormats.JSON)
+                .create());
+        resultSett.close();
+        state.close();
         connection.close();
 
         // Check business key
