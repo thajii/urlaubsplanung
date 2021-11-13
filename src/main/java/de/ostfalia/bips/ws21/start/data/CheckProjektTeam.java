@@ -21,8 +21,8 @@ public class CheckProjektTeam implements JavaDelegate {
     
     public void execute(DelegateExecution execution) throws Exception {
     	final Connection connection = DatabaseConnection.getConnection();
-        final PreparedStatement statement = connection.prepareStatement("SELECT m.idM, m.name FROM mitarbeiter m Join projekte_has_mitarbeiter pm On m.idM = pm.idM "
-        		+ "Join (SELECT idP from projekte_has_mitarbeiter Where idM = ?) p "
+        final PreparedStatement statement = connection.prepareStatement("SELECT m.idM, m.name FROM mitarbeiter m Join projekt_has_mitarbeiter pm On m.idM = pm.idM "
+        		+ "Join (SELECT idP from projekt_has_mitarbeiter Where idM = ?) p "
         		+ "On pm.idP = p.idP Where m.idM != ? Group By m.idM Order By m.idM");
         statement.setInt(1, (int) execution.getVariable("MITARBEITER_ID"));
         statement.setInt(2, (int) execution.getVariable("MITARBEITER_ID"));

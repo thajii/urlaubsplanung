@@ -25,8 +25,8 @@ public class CheckForCriticalArea implements JavaDelegate {
          LocalDate endDate = LocalDate.parse((CharSequence) execution.getVariable("VACATION_END"));
          
          while(resultSet.next()) {
-        	 LocalDate startCritical = LocalDate.parse((CharSequence) resultSet.getString("start"));
-        	 LocalDate endCritical = LocalDate.parse((CharSequence) resultSet.getString("ende"));
+        	 LocalDate startCritical = LocalDate.parse((CharSequence) resultSet.getString("start")).minusDays(1);
+        	 LocalDate endCritical = LocalDate.parse((CharSequence) resultSet.getString("ende")).minusDays(1);
         	 //Fall, dass Urlaub im kritischen Bereich endet
         	 if (startDate.isBefore(startCritical) 
         			 && endDate.isAfter(startCritical) && endDate.isBefore(endCritical)) {

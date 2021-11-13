@@ -26,6 +26,8 @@ public class CreateVacationRequest implements JavaDelegate {
         LocalDate startDate = LocalDate.parse((CharSequence) execution.getVariable("VACATION_START"));
         LocalDate endDate = LocalDate.parse((CharSequence) execution.getVariable("VACATION_END"));
         int dauer = CountBusinessDays.countBusinessDaysBetween(startDate, endDate, holidayList).size();
+        startDate = startDate.plusDays(1);
+        endDate = endDate.plusDays(1);
         execution.setVariable("VACATION_ID", idUA);
         execution.setVariable("ANTRAGS_STATUS", "offen");
         final String sql = "INSERT INTO urlaubsantrag (idUA, idM, startDatum, endDatum, idStatus, dauer) " +
@@ -33,8 +35,8 @@ public class CreateVacationRequest implements JavaDelegate {
         final CallableStatement statement = connection.prepareCall(sql);
         statement.setInt(1, idUA);
         statement.setInt(2, (int) execution.getVariable("MITARBEITER_ID"));
-        statement.setDate(3, java.sql.Date.valueOf(execution.getVariable("VACATION_START").toString()));
-        statement.setDate(4, java.sql.Date.valueOf(execution.getVariable("VACATION_END").toString()));
+        statement.setDate(3, java.sql.Date.valueOf(startDate));
+        statement.setDate(4, java.sql.Date.valueOf(endDate));
         statement.setInt(5, 1);
         statement.setInt(6, dauer);
         statement.executeUpdate();
