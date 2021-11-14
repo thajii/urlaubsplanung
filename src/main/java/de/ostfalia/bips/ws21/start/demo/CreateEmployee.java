@@ -40,8 +40,8 @@ public class CreateEmployee implements JavaDelegate {
                 "VALUES (?, ?, ?)";
         final CallableStatement statements = connection.prepareCall(sqlstatement);
         statements.setInt(1, idMP);
-        statements.setInt(2, (int) execution.getVariable("MITARBEITER_ID"));
-        statements.setInt(3, (int) execution.getVariable("PROJEKT_ID"));
+        statements.setInt(2, (int) execution.getVariable("PROJEKT_ID"));
+        statements.setInt(3, (int) execution.getVariable("MITARBEITER_ID"));
         statements.executeUpdate();
         statements.close();
         

@@ -146,7 +146,7 @@
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_0l9br45" sourceRef="Activity_1n9ihrv" targetRef="Event_0spaejs" />
     <bpmn:sequenceFlow id="Flow_0kbu8x2" sourceRef="Activity_05js9i8" targetRef="Gateway_0u10z5u" />
-    <bpmn:userTask id="Activity_05js9i8" name="Prüfe Teamverfügbarkeit " camunda:formKey="embedded:app:forms/demo/CheckTeamAvailability.html" camunda:assignee="demo">
+    <bpmn:userTask id="Activity_05js9i8" name="Prüfe Teamverfügbarkeit " camunda:formKey="embedded:app:forms/demo/CheckTeamAvailability.html" camunda:assignee="john">
       <bpmn:incoming>Flow_0noz4gd</bpmn:incoming>
       <bpmn:outgoing>Flow_0kbu8x2</bpmn:outgoing>
     </bpmn:userTask>
@@ -195,7 +195,7 @@
       <bpmn:incoming>Flow_0tyi9yr</bpmn:incoming>
       <bpmn:outgoing>Flow_1xepn79</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="Activity_0ld6p8l" name="Prüfe Urlaubsantrag" camunda:formKey="embedded:app:forms/demo/ShowRequestMary.html" camunda:assignee="demo">
+    <bpmn:userTask id="Activity_0ld6p8l" name="Prüfe Urlaubsantrag" camunda:formKey="embedded:app:forms/demo/ShowRequestMary.html" camunda:assignee="mary">
       <bpmn:incoming>Flow_1e7uogg</bpmn:incoming>
       <bpmn:outgoing>Flow_13s4usu</bpmn:outgoing>
     </bpmn:userTask>
