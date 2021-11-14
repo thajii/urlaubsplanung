@@ -26,7 +26,8 @@ public class SendVacationRequestDataAccepted implements JavaDelegate {
         resultUrlaub.close();
         statusUrlaub.close();
 
-        execution.setVariable("MITARBEITER_URLAUBSTAGE", urlaubsTage);
+        execution.setVariable("MITARBEITER_URLAUBSTAGE", urlaubsTage - ((long)execution.getVariable("VACATION_DAYS")));
+        
     	final CallableStatement status = connection.prepareCall("SELECT idStatus FROM antragsstatus WHERE bezeichnung = ?");
     	status.setString(1, execution.getVariable("ANTRAGS_STATUS").toString());
     	final ResultSet result = status.executeQuery();
