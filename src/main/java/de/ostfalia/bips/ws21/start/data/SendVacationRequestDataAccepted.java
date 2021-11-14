@@ -16,6 +16,8 @@ public class SendVacationRequestDataAccepted implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
     	final Connection connection = DatabaseConnection.getConnection();
+    	
+    	//Setzen der Prozesvariable zum Antragssatus auf abgelehnt und holen der passenden StatusID aus der DB
     	execution.setVariable("ANTRAGS_STATUS", "genehmigt");
         execution.setVariable("MITARBEITER_URLAUBSTAGE", execution.getVariable("MITARBEITER_RESTURLAUB"));
     	final CallableStatement status = connection.prepareCall("SELECT idStatus FROM antragsstatus WHERE bezeichnung = ?");
@@ -24,7 +26,6 @@ public class SendVacationRequestDataAccepted implements JavaDelegate {
         int idStatus = !result.next() ? 0 : result.getInt(1);
         result.close();
         status.close();
-
         
         final Map<String, Object> data = new HashMap<>();
         data.put("MITARBEITER_ID", execution.getVariable("MITARBEITER_ID"));
@@ -39,12 +40,15 @@ public class SendVacationRequestDataAccepted implements JavaDelegate {
         data.put("ANTRAGS_STATUS", execution.getVariable("ANTRAGS_STATUS"));
         final String key = (String) execution.getVariable("DEMO_BUSINESS_KEY");
         
+        //Update der StatusID des Urlaubsantrags in DB
         final String sql = "UPDATE urlaubsantrag SET idStatus = ? WHERE idUA = ?";
     	final CallableStatement statement = connection.prepareCall(sql);
         statement.setInt(1, idStatus);
         statement.setInt(2, (int) execution.getVariable("VACATION_ID"));
         statement.executeUpdate();
         statement.close();
+        
+        //Update der Urlaubstage in der DB
         int idM = (int) execution.getVariable("MITARBEITER_ID");
         final String sqlDays = "UPDATE mitarbeiter SET anzahlUrlaubstage = ? WHERE idM = ?";
         final CallableStatement statementDays = connection.prepareCall(sqlDays);

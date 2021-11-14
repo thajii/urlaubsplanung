@@ -18,18 +18,26 @@ public class CreateVacationRequest implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         final Connection connection = DatabaseConnection.getConnection();
+        
         final CallableStatement max = connection.prepareCall("SELECT MAX(idUA) FROM urlaubsAntrag");
         final ResultSet result = max.executeQuery();
         int idUA = !result.next() ? 0 : result.getInt(1) + 1;
         result.close();
+        
         Optional<List<LocalDate>> holidayList = Optional.of(CheckHolidays.holidayList());
+        
+        //Speichern von Start- und Enddatum des Antrags in LocalDate
         LocalDate startDate = LocalDate.parse((CharSequence) execution.getVariable("VACATION_START"));
         LocalDate endDate = LocalDate.parse((CharSequence) execution.getVariable("VACATION_END"));
+        
         int dauer = CountBusinessDays.countBusinessDaysBetween(startDate, endDate, holidayList).size();
         startDate = startDate.plusDays(1);
         endDate = endDate.plusDays(1);
+        
         execution.setVariable("VACATION_ID", idUA);
         execution.setVariable("ANTRAGS_STATUS", "offen");
+        
+        //Schreiben des Urlaubsantrags in die DB
         final String sql = "INSERT INTO urlaubsantrag (idUA, idM, startDatum, endDatum, idStatus, dauer) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
         final CallableStatement statement = connection.prepareCall(sql);

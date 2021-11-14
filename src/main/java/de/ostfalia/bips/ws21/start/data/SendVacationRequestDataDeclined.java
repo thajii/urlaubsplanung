@@ -16,6 +16,8 @@ public class SendVacationRequestDataDeclined implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
     	final Connection connection = DatabaseConnection.getConnection();
+    	
+    	//Setzen der Prozesvariable zum Antragssatus auf abgelehnt und holen der passenden StatusID aus der DB
     	execution.setVariable("ANTRAGS_STATUS", "abgelehnt");
     	final CallableStatement status = connection.prepareCall("SELECT idStatus FROM antragsstatus WHERE bezeichnung = ?");
     	status.setString(1, execution.getVariable("ANTRAGS_STATUS").toString());
@@ -37,6 +39,7 @@ public class SendVacationRequestDataDeclined implements JavaDelegate {
         data.put("ANTRAGS_STATUS", execution.getVariable("ANTRAGS_STATUS"));
         final String key = (String) execution.getVariable("DEMO_BUSINESS_KEY");
         
+        //Update der StatusID des Urlaubsantrags in DB
         final String sql = "UPDATE urlaubsantrag SET idStatus = ? WHERE idUA = ?";
     	final CallableStatement statement = connection.prepareCall(sql);
         statement.setInt(1, idStatus);

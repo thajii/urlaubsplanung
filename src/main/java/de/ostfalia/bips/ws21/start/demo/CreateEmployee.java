@@ -33,7 +33,9 @@ public class CreateEmployee implements JavaDelegate {
         final ResultSet resultt = maxi.executeQuery();
         int idMP = !resultt.next() ? 0 : resultt.getInt(1) + 1;
         resultt.close();
+        
         execution.setVariable("MITARBEITER_PROJEKT_ID", idMP);
+        
         final String sqlstatement = "INSERT INTO projekt_has_mitarbeiter (idMP, idP, idM) " +
                 "VALUES (?, ?, ?)";
         final CallableStatement statements = connection.prepareCall(sqlstatement);
@@ -42,6 +44,7 @@ public class CreateEmployee implements JavaDelegate {
         statements.setInt(3, (int) execution.getVariable("PROJEKT_ID"));
         statements.executeUpdate();
         statements.close();
+        
         final CallableStatement checksAn = connection.prepareCall("SET FOREIGN_KEY_CHECKS=1");
         checksAn.execute();
         connection.close();

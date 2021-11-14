@@ -29,8 +29,6 @@ public class LoadEmployee implements JavaDelegate {
         resultSet.close();
         statement.close();
 
-
-
         final PreparedStatement state = connection.prepareStatement("SELECT * FROM projekt");
         final ResultSet resultSett = state.executeQuery();
         final Map<Integer, String> projects = new HashMap<>();
