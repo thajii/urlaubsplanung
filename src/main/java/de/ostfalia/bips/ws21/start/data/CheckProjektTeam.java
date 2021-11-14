@@ -24,34 +24,80 @@ public class CheckProjektTeam implements JavaDelegate {
         final PreparedStatement statement = connection.prepareStatement("SELECT se.idM, se.name, pr.name AS projekt FROM projekt pr JOIN "
         		+ "(SELECT m.idM, m.name, pm.idP FROM mitarbeiter m Join projekt_has_mitarbeiter pm On m.idM = pm.idM "
         		+ "Join (SELECT idP from projekt_has_mitarbeiter Where idM = ?) p "
-        		+ "On pm.idP = p.idP Where m.idM != ? Order By m.idM) se ON se.idP = pr.idP");
+        		+ "On pm.idP = p.idP Where m.idM != ? ORDER BY m.idM) se ON se.idP = pr.idP ORDER BY se.idM");
         statement.setInt(1, (int) execution.getVariable("MITARBEITER_ID"));
         statement.setInt(2, (int) execution.getVariable("MITARBEITER_ID"));
         final ResultSet resultSet = statement.executeQuery();
         resultSet.last();
-        final String[][] teamArray = new String[resultSet.getRow()+1][3];
+        final String[][] teamArray = new String[resultSet.getRow()+1][5];
         resultSet.beforeFirst();
         //final Map<Integer, String> employees = new HashMap<>();
         int i = 0;
+        
+        LocalDate startDate = LocalDate.parse((CharSequence) execution.getVariable("VACATION_START"));
+        LocalDate endDate = LocalDate.parse((CharSequence) execution.getVariable("VACATION_END"));
+        
         while(resultSet.next()) {
         	//employees.put(resultSet.getInt("idM"), resultSet.getString("name"));
         	teamArray[i][0] = String.valueOf(resultSet.getInt("idM"));
         	teamArray[i][1] = resultSet.getString("name");
         	teamArray[i][2] = resultSet.getString("projekt");
+        	
+        	final PreparedStatement statementVacation = connection.prepareStatement("SELECT startDatum, endDatum FROM urlaubsantrag WHERE idM = ? AND idStatus = 3");
+        	statementVacation.setInt(1, resultSet.getInt("idM"));
+        	final ResultSet resultSetVacation = statementVacation.executeQuery();
+        	while(resultSetVacation.next()) {
+        		LocalDate startGenehmigterUrlaub = LocalDate.parse((CharSequence) resultSetVacation.getString("startDatum"));
+           	 	LocalDate endGenehmigterUrlaub = LocalDate.parse((CharSequence) resultSetVacation.getString("endDatum"));
+        		//Fall, dass Urlaube sich zu Beginn überschneiden
+	           	 if (startDate.isBefore(startGenehmigterUrlaub) 
+	           			 && endDate.isAfter(startGenehmigterUrlaub) && endDate.isBefore(endGenehmigterUrlaub)) {
+	           		teamArray[i][3] = startGenehmigterUrlaub.toString();
+	           		teamArray[i][4] = endGenehmigterUrlaub.toString();
+	           	 }
+	           	 //Fall, dass Urlaub den bereits genehmigten enthält
+	           	 if (startDate.isBefore(startGenehmigterUrlaub) 
+	           			 && endDate.isAfter(endGenehmigterUrlaub)) {
+	           		teamArray[i][3] = startGenehmigterUrlaub.toString();
+	           		teamArray[i][4] = endGenehmigterUrlaub.toString();
+	           	 }
+	           	 //Fall, dass Urlaub komplett innerhalb eines bereits genehmigten Urlaub liegt
+	           	 if (startDate.isAfter(startGenehmigterUrlaub) && startDate.isBefore(endGenehmigterUrlaub) 
+	           			 && endDate.isAfter(startGenehmigterUrlaub) && endDate.isBefore(endGenehmigterUrlaub)) {
+	           		teamArray[i][3] = startGenehmigterUrlaub.toString();
+	           		teamArray[i][4] = endGenehmigterUrlaub.toString();
+	           	 }
+	           	 //Fall, dass Urlaube beginnt, bevor bereits genehmigter endet
+	           	 if (startDate.isAfter(startGenehmigterUrlaub) && startDate.isBefore(endGenehmigterUrlaub) 
+	           			 && endDate.isAfter(endGenehmigterUrlaub)) {
+	           		teamArray[i][3] = startGenehmigterUrlaub.toString();
+	           		teamArray[i][4] = endGenehmigterUrlaub.toString();
+	           	 }
+	           //Fall, dass Start oder Enddatum gleich sind
+	           	 if (startDate.equals(startGenehmigterUrlaub) || endDate.equals(endGenehmigterUrlaub)) {
+	           		teamArray[i][3] = startGenehmigterUrlaub.toString();
+	           		teamArray[i][4] = endGenehmigterUrlaub.toString();
+	           	 }
+        	}
         	i++;
         }
         statement.close();
         connection.close();
-        if (teamArray.length>0) {
-        	execution.setVariable("MITARBEITER_1", "Mitarbeiter: " + teamArray[0][1] + " ist auch im Projekt: " + teamArray[0][2]);
-        	if (teamArray.length>1) {
-        		execution.setVariable("MITARBEITER_2", "Mitarbeiter: " + teamArray[1][1] + " ist auch im Projekt: " + teamArray[1][2]);
-        		if (teamArray.length>2) {
-        			execution.setVariable("MITARBEITER_3", "Mitarbeiter: " + teamArray[2][1] + " ist auch im Projekt: " + teamArray[1][2]);
-        			if (teamArray.length>3) {
-        				execution.setVariable("MITARBEITER_4", "Mitarbeiter: " + teamArray[3][1] + " ist auch im Projekt: " + teamArray[1][2]);
-        				if (teamArray.length>4) {
-        					execution.setVariable("MITARBEITER_5", "Mitarbeiter: " + teamArray[4][1] + " ist auch im Projekt: " + teamArray[1][2]);
+        if (teamArray.length>0 && teamArray[0][3] != null) {
+        	execution.setVariable("MITARBEITER_1", "Mitarbeiter: " + teamArray[0][1] + " ist auch im Projekt: " + teamArray[0][2] 
+        			+ " und hat bereits Urlaub vom: " + teamArray[0][3] + " bis zum: " + teamArray[0][4]);
+        	if (teamArray.length>1 && teamArray[1][3] != null) {
+        		execution.setVariable("MITARBEITER_2", "Mitarbeiter: " + teamArray[1][1] + " ist auch im Projekt: " + teamArray[1][2] 
+        				+ " und hat bereits Urlaub vom: " + teamArray[1][3] + " bis zum: " + teamArray[1][4]);
+        		if (teamArray.length>2 && teamArray[2][3] != null) {
+        			execution.setVariable("MITARBEITER_3", "Mitarbeiter: " + teamArray[2][1] + " ist auch im Projekt: " + teamArray[2][2]
+        					+ " und hat bereits Urlaub vom: " + teamArray[2][3] + " bis zum: " + teamArray[2][4]);
+        			if (teamArray.length>3 && teamArray[3][3] != null) {
+        				execution.setVariable("MITARBEITER_4", "Mitarbeiter: " + teamArray[3][1] + " ist auch im Projekt: " + teamArray[3][2]
+        						+ " und hat bereits Urlaub vom: " + teamArray[3][3] + " bis zum: " + teamArray[3][4]);
+        				if (teamArray.length>4 && teamArray[4][3] != null) {
+        					execution.setVariable("MITARBEITER_5", "Mitarbeiter: " + teamArray[4][1] + " ist auch im Projekt: " + teamArray[4][2] 
+        							+ " und hat bereits Urlaub vom: " + teamArray[4][3] + " bis zum: " + teamArray[4][4]);
         				}
         			}
         		}
