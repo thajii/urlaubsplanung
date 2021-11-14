@@ -39,47 +39,52 @@ public class CheckProjektTeam implements JavaDelegate {
         
         while(resultSet.next()) {
         	//employees.put(resultSet.getInt("idM"), resultSet.getString("name"));
-        	teamArray[i][0] = String.valueOf(resultSet.getInt("idM"));
-        	teamArray[i][1] = resultSet.getString("name");
-        	teamArray[i][2] = resultSet.getString("projekt");
-        	
-        	final PreparedStatement statementVacation = connection.prepareStatement("SELECT startDatum, endDatum FROM urlaubsantrag WHERE idM = ? AND idStatus = 3");
-        	statementVacation.setInt(1, resultSet.getInt("idM"));
-        	final ResultSet resultSetVacation = statementVacation.executeQuery();
-        	while(resultSetVacation.next()) {
-        		LocalDate startGenehmigterUrlaub = LocalDate.parse((CharSequence) resultSetVacation.getString("startDatum"));
-           	 	LocalDate endGenehmigterUrlaub = LocalDate.parse((CharSequence) resultSetVacation.getString("endDatum"));
-        		//Fall, dass Urlaube sich zu Beginn überschneiden
-	           	 if (startDate.isBefore(startGenehmigterUrlaub) 
-	           			 && endDate.isAfter(startGenehmigterUrlaub) && endDate.isBefore(endGenehmigterUrlaub)) {
-	           		teamArray[i][3] = startGenehmigterUrlaub.toString();
-	           		teamArray[i][4] = endGenehmigterUrlaub.toString();
-	           	 }
-	           	 //Fall, dass Urlaub den bereits genehmigten enthält
-	           	 if (startDate.isBefore(startGenehmigterUrlaub) 
-	           			 && endDate.isAfter(endGenehmigterUrlaub)) {
-	           		teamArray[i][3] = startGenehmigterUrlaub.toString();
-	           		teamArray[i][4] = endGenehmigterUrlaub.toString();
-	           	 }
-	           	 //Fall, dass Urlaub komplett innerhalb eines bereits genehmigten Urlaub liegt
-	           	 if (startDate.isAfter(startGenehmigterUrlaub) && startDate.isBefore(endGenehmigterUrlaub) 
-	           			 && endDate.isAfter(startGenehmigterUrlaub) && endDate.isBefore(endGenehmigterUrlaub)) {
-	           		teamArray[i][3] = startGenehmigterUrlaub.toString();
-	           		teamArray[i][4] = endGenehmigterUrlaub.toString();
-	           	 }
-	           	 //Fall, dass Urlaube beginnt, bevor bereits genehmigter endet
-	           	 if (startDate.isAfter(startGenehmigterUrlaub) && startDate.isBefore(endGenehmigterUrlaub) 
-	           			 && endDate.isAfter(endGenehmigterUrlaub)) {
-	           		teamArray[i][3] = startGenehmigterUrlaub.toString();
-	           		teamArray[i][4] = endGenehmigterUrlaub.toString();
-	           	 }
-	           //Fall, dass Start oder Enddatum gleich sind
-	           	 if (startDate.equals(startGenehmigterUrlaub) || endDate.equals(endGenehmigterUrlaub)) {
-	           		teamArray[i][3] = startGenehmigterUrlaub.toString();
-	           		teamArray[i][4] = endGenehmigterUrlaub.toString();
-	           	 }
-        	}
-        	i++;
+        	if (i > 0 && teamArray[i-1][0].equals(String.valueOf(resultSet.getInt("idM")))) {
+        		String projekt = resultSet.getString("projekt");
+        		teamArray[i-1][2] += " , " + projekt;
+        	} else {
+        		teamArray[i][0] = String.valueOf(resultSet.getInt("idM"));
+	        	teamArray[i][1] = resultSet.getString("name");
+	        	teamArray[i][2] = resultSet.getString("projekt");
+	        	
+	        	final PreparedStatement statementVacation = connection.prepareStatement("SELECT startDatum, endDatum FROM urlaubsantrag WHERE idM = ? AND idStatus = 3");
+	        	statementVacation.setInt(1, resultSet.getInt("idM"));
+	        	final ResultSet resultSetVacation = statementVacation.executeQuery();
+	        	while(resultSetVacation.next()) {
+	        		LocalDate startGenehmigterUrlaub = LocalDate.parse((CharSequence) resultSetVacation.getString("startDatum"));
+	           	 	LocalDate endGenehmigterUrlaub = LocalDate.parse((CharSequence) resultSetVacation.getString("endDatum"));
+	        		//Fall, dass Urlaube sich zu Beginn überschneiden
+		           	 if (startDate.isBefore(startGenehmigterUrlaub) 
+		           			 && endDate.isAfter(startGenehmigterUrlaub) && endDate.isBefore(endGenehmigterUrlaub)) {
+		           		teamArray[i][3] = startGenehmigterUrlaub.toString();
+		           		teamArray[i][4] = endGenehmigterUrlaub.toString();
+		           	 }
+		           	 //Fall, dass Urlaub den bereits genehmigten enthält
+		           	 if (startDate.isBefore(startGenehmigterUrlaub) 
+		           			 && endDate.isAfter(endGenehmigterUrlaub)) {
+		           		teamArray[i][3] = startGenehmigterUrlaub.toString();
+		           		teamArray[i][4] = endGenehmigterUrlaub.toString();
+		           	 }
+		           	 //Fall, dass Urlaub komplett innerhalb eines bereits genehmigten Urlaub liegt
+		           	 if (startDate.isAfter(startGenehmigterUrlaub) && startDate.isBefore(endGenehmigterUrlaub) 
+		           			 && endDate.isAfter(startGenehmigterUrlaub) && endDate.isBefore(endGenehmigterUrlaub)) {
+		           		teamArray[i][3] = startGenehmigterUrlaub.toString();
+		           		teamArray[i][4] = endGenehmigterUrlaub.toString();
+		           	 }
+		           	 //Fall, dass Urlaube beginnt, bevor bereits genehmigter endet
+		           	 if (startDate.isAfter(startGenehmigterUrlaub) && startDate.isBefore(endGenehmigterUrlaub) 
+		           			 && endDate.isAfter(endGenehmigterUrlaub)) {
+		           		teamArray[i][3] = startGenehmigterUrlaub.toString();
+		           		teamArray[i][4] = endGenehmigterUrlaub.toString();
+		           	 }
+		           //Fall, dass Start oder Enddatum gleich sind
+		           	 if (startDate.equals(startGenehmigterUrlaub) || endDate.equals(endGenehmigterUrlaub)) {
+		           		teamArray[i][3] = startGenehmigterUrlaub.toString();
+		           		teamArray[i][4] = endGenehmigterUrlaub.toString();
+		           	 }
+	        	}
+	        	i++;
+        	}	       	
         }
         statement.close();
         connection.close();
