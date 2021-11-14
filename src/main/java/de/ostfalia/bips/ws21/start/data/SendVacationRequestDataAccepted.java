@@ -19,7 +19,14 @@ public class SendVacationRequestDataAccepted implements JavaDelegate {
     	
     	//Setzen der Prozesvariable zum Antragssatus auf abgelehnt und holen der passenden StatusID aus der DB
     	execution.setVariable("ANTRAGS_STATUS", "genehmigt");
-        execution.setVariable("MITARBEITER_URLAUBSTAGE", execution.getVariable("MITARBEITER_RESTURLAUB"));
+        final CallableStatement statusUrlaub = connection.prepareCall("SELECT anzahlUrlaubstage FROM mitarbeiter WHERE idM = ?");
+        statusUrlaub.setString(1, execution.getVariable("MITARBEITER_ID").toString());
+        final ResultSet resultUrlaub = statusUrlaub.executeQuery();
+        int urlaubsTage = !resultUrlaub.next() ? 0 : resultUrlaub.getInt(1);
+        resultUrlaub.close();
+        statusUrlaub.close();
+
+        execution.setVariable("MITARBEITER_URLAUBSTAGE", urlaubsTage);
     	final CallableStatement status = connection.prepareCall("SELECT idStatus FROM antragsstatus WHERE bezeichnung = ?");
     	status.setString(1, execution.getVariable("ANTRAGS_STATUS").toString());
     	final ResultSet result = status.executeQuery();
