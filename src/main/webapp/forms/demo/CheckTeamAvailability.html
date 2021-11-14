@@ -1,4 +1,4 @@
-<form name="CheckTeamAvailability" role="form">
+<form class="form-horizontal" name="CheckTeamAvailability" role="form">
     <div class="form-group">
         <label>Name</label>
         <input type="text"
@@ -32,44 +32,37 @@
 	            cam-choices="AVAILABLE_STATUS">
 	    </select>
 	</div>
-	<div class="form-group">
-	    <label>Mitarbeiter aus Projekten</label>
-	    <select multiple class="form-control" 
-		    cam-variable-name="TEAM"
-	        cam-variable-type="String"  
-		    cam-choices="PROJEKTTEAM">
-	    </select>
-	 </div>
-	 
-	 <h3>Tabelle</h3>
-
-     <table border="2">
-         <script language="javascript" type="text/javascript">
-             <!--
-
-             var myArray = new Array();
-             //myArray = Array.from("PROJEKTTEAM");
-             myArray[0] = 'test';
-             myArray[1] = 'test2';
-             var myTable= "<table border='1'><tr><th>Mitarbeiter</th>";
-             myTable+= "<th>  Col Head 2</th>";
-             myTable+="<th>  Col Head 3</th></tr>";
-
-             for (var i=0; i<"PROJEKTTEAM_GROESSE"; i++) {
-	             myTable+="<tr><td bgcolor='silver'>" + myArray[i] + "</td></tr>";
-           	 }  
-            myTable+="</table>";
-
-            document.getElementById('tableDiv').innerHTML=myTable;
-
-              //-->
-         </script>
-     </table>
-     </div>
-
-     <div id="tableDiv" style="text-align:center" >
-	     <table id="mainTable"
-	     </table>
-	</div>
+	  <div class="form-row">
+	    <div class="col">
+	      <input type="text" 
+	      class="form-control" 
+	      cam-variable-name="MITARBEITER_1"
+          cam-variable-type="String">
+	    </div>
+		<div class="col">
+	      <input type="text" 
+	      class="form-control" 
+	      cam-variable-name="MITARBEITER_2"
+          cam-variable-type="String">
+	    </div>
+	    <div class="col">
+	      <input type="text" 
+	      class="form-control" 
+	      cam-variable-name="MITARBEITER_3"
+          cam-variable-type="String">
+	    </div>
+	    <div class="col">
+	      <input type="text" 
+	      class="form-control" 
+	      cam-variable-name="MITARBEITER_4"
+          cam-variable-type="String">
+	    </div>
+	    <div class="col">
+	      <input type="text" 
+	      class="form-control" 
+	      cam-variable-name="MITARBEITER_5"
+          cam-variable-type="String">
+	    </div>
+	  </div>
 
 </form>
