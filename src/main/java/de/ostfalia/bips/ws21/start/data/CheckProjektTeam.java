@@ -62,7 +62,7 @@ public class CheckProjektTeam implements JavaDelegate {
 	           	 	
 	           	 	//Prüfung ob sich die Urlaubszeiträume überschneiden 
 	           	 	
-	        		//Fall, dass Urlaube sich zu Beginn überschneiden
+	        		//Fall, dass Urlaube sich überschneiden (Ende im bereits genehmigten)
 		           	 if (startDate.isBefore(startGenehmigterUrlaub) 
 		           			 && endDate.isAfter(startGenehmigterUrlaub) && endDate.isBefore(endGenehmigterUrlaub)) {
 		           		//Schreiben des Start- und Enddatums ins Array
@@ -107,22 +107,23 @@ public class CheckProjektTeam implements JavaDelegate {
         if (teamArray.length>0 && teamArray[0][3] != null) {
         	execution.setVariable("MITARBEITER_1", "Mitarbeiter*in: " + teamArray[0][1] + " ist auch im Projekt: " + teamArray[0][2] 
         			+ " und hat bereits Urlaub vom: " + teamArray[0][3] + " bis zum: " + teamArray[0][4]);
-        	if (teamArray.length>1 && teamArray[1][3] != null) {
-        		execution.setVariable("MITARBEITER_2", "Mitarbeiter*in: " + teamArray[1][1] + " ist auch im Projekt: " + teamArray[1][2] 
-        				+ " und hat bereits Urlaub vom: " + teamArray[1][3] + " bis zum: " + teamArray[1][4]);
-        		if (teamArray.length>2 && teamArray[2][3] != null) {
-        			execution.setVariable("MITARBEITER_3", "Mitarbeiter*in: " + teamArray[2][1] + " ist auch im Projekt: " + teamArray[2][2]
-        					+ " und hat bereits Urlaub vom: " + teamArray[2][3] + " bis zum: " + teamArray[2][4]);
-        			if (teamArray.length>3 && teamArray[3][3] != null) {
-        				execution.setVariable("MITARBEITER_4", "Mitarbeiter*in: " + teamArray[3][1] + " ist auch im Projekt: " + teamArray[3][2]
-        						+ " und hat bereits Urlaub vom: " + teamArray[3][3] + " bis zum: " + teamArray[3][4]);
-        				if (teamArray.length>4 && teamArray[4][3] != null) {
-        					execution.setVariable("MITARBEITER_5", "Mitarbeiter*in: " + teamArray[4][1] + " ist auch im Projekt: " + teamArray[4][2] 
-        							+ " und hat bereits Urlaub vom: " + teamArray[4][3] + " bis zum: " + teamArray[4][4]);
-        				}
-        			}
-        		}
-        	}
+        }
+        if (teamArray.length>1 && teamArray[1][3] != null) {
+        	execution.setVariable("MITARBEITER_2", "Mitarbeiter*in: " + teamArray[1][1] + " ist auch im Projekt: " + teamArray[1][2] 
+        			+ " und hat bereits Urlaub vom: " + teamArray[1][3] + " bis zum: " + teamArray[1][4]);	
+        }
+        if (teamArray.length>2 && teamArray[2][3] != null) {
+        		execution.setVariable("MITARBEITER_3", "Mitarbeiter*in: " + teamArray[2][1] + " ist auch im Projekt: " + teamArray[2][2]
+        			+ " und hat bereits Urlaub vom: " + teamArray[2][3] + " bis zum: " + teamArray[2][4]);	
+        }
+        if (teamArray.length>3 && teamArray[3][3] != null) {
+        		execution.setVariable("MITARBEITER_4", "Mitarbeiter*in: " + teamArray[3][1] + " ist auch im Projekt: " + teamArray[3][2]
+        			+ " und hat bereits Urlaub vom: " + teamArray[3][3] + " bis zum: " + teamArray[3][4]);
+        				
+        }
+    	if (teamArray.length>4 && teamArray[4][3] != null) {
+        	execution.setVariable("MITARBEITER_5", "Mitarbeiter*in: " + teamArray[4][1] + " ist auch im Projekt: " + teamArray[4][2] 
+        			+ " und hat bereits Urlaub vom: " + teamArray[4][3] + " bis zum: " + teamArray[4][4]);
         }
     	
         //Vorbereitung des Auswahlfelds in der Form um den Urlaubsantrag anzunehmen oder abzulehnen
