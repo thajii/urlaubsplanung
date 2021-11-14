@@ -18,12 +18,12 @@ public class LoadEmployee implements JavaDelegate {
         final Connection connection = DatabaseConnection.getConnection();
         final PreparedStatement statement = connection.prepareStatement("SELECT * FROM mitarbeiter");
         final ResultSet resultSet = statement.executeQuery();
-        final Map<Integer, String> customers = new HashMap<>();
+        final Map<Integer, String> employees = new HashMap<>();
         while(resultSet.next()) {
-            customers.put(resultSet.getInt("idM"), resultSet.getString("name"));
+            employees.put(resultSet.getInt("idM"), resultSet.getString("name"));
         }
-        customers.put(-1, "Mitarbeiter anlegen");
-        execution.setVariable("AVAILABLE_MITARBEITER", Variables.objectValue(customers)
+        employees.put(-1, "Mitarbeiter anlegen");
+        execution.setVariable("AVAILABLE_MITARBEITER", Variables.objectValue(employees)
                 .serializationDataFormat(Variables.SerializationDataFormats.JSON)
                 .create());
         resultSet.close();

@@ -17,6 +17,7 @@ public class SendVacationRequestDataAccepted implements JavaDelegate {
     public void execute(DelegateExecution execution) throws Exception {
     	final Connection connection = DatabaseConnection.getConnection();
     	execution.setVariable("ANTRAGS_STATUS", "genehmigt");
+        execution.setVariable("MITARBEITER_URLAUBSTAGE", execution.getVariable("MITARBEITER_RESTURLAUB"));
     	final CallableStatement status = connection.prepareCall("SELECT idStatus FROM antragsstatus WHERE bezeichnung = ?");
     	status.setString(1, execution.getVariable("ANTRAGS_STATUS").toString());
     	final ResultSet result = status.executeQuery();

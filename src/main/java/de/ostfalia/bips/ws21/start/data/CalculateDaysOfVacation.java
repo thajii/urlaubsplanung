@@ -16,10 +16,12 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
+// Klasse zur Berechnung der Anzahl von Urlaubstagen
 public class CalculateDaysOfVacation implements JavaDelegate {
     @Override
     
     public void execute(DelegateExecution execution) throws Exception {
+		// sqlAbfrage um Antragsstatus zu erhalten
     	final Connection connection = DatabaseConnection.getConnection();
     	execution.setVariable("ANTRAGS_STATUS", "in bearbeitung");
     	final CallableStatement status = connection.prepareCall("SELECT idStatus FROM antragsstatus WHERE bezeichnung = ?");
@@ -28,15 +30,19 @@ public class CalculateDaysOfVacation implements JavaDelegate {
         int idStatus = !result.next() ? 0 : result.getInt(1);
         result.close();
         status.close();
-       
+
+		// speichere start und enddatum in Variablen und erhalte Liste der Feiertage, dann Berechnung der Werktage
+		// und daraus resultierend die Berechnung der restlichen Urlaubstage
     	LocalDate startDate = LocalDate.parse((CharSequence) execution.getVariable("VACATION_START"));
     	LocalDate endDate = LocalDate.parse((CharSequence) execution.getVariable("VACATION_END"));
 		Optional<List<LocalDate>> holidayList = Optional.of(CheckHolidays.holidayList());
     	long anzahl = CountBusinessDays.countBusinessDaysBetween(startDate, endDate, holidayList).size();
 		long rest = Long.valueOf((String) execution.getVariable("MITARBEITER_URLAUBSTAGE")) - anzahl;
     	execution.setVariable("VACATION_DAYS", anzahl);
-    	execution.setVariable("MITARBEITER_RESTURLAUB", rest);
-    	
+		execution.setVariable("MITARBEITER_RESTURLAUB", rest);
+
+
+		// update des Antragsstatus in der DB
     	final String sql = "UPDATE urlaubsantrag SET idStatus = ? WHERE idUA = ?";
     	final CallableStatement statement = connection.prepareCall(sql);
         statement.setInt(1, idStatus);
