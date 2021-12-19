@@ -112,7 +112,7 @@ CREATE TABLE `mitarbeiter` (
 
 LOCK TABLES `mitarbeiter` WRITE;
 /*!40000 ALTER TABLE `mitarbeiter` DISABLE KEYS */;
-INSERT INTO `mitarbeiter` VALUES (1,'Max Mustermann','Musterstraße 1, 12345 Musterstadt',26),(2,'Erika Musterfrau','Dorfstraße 6, 12345 Musterstadt',22),(3,'John Doe','Bachstraße 45, 10555 Berlin',25);
+INSERT INTO `mitarbeiter` VALUES (1,'Max Mustermann','Musterstraße 1, 12345 Musterstadt',30),(2,'Erika Musterfrau','Dorfstraße 6, 12345 Musterstadt',30),(3,'John Doe','Bachstraße 45, 10555 Berlin',30);
 /*!40000 ALTER TABLE `mitarbeiter` ENABLE KEYS */;
 UNLOCK TABLES;
 
