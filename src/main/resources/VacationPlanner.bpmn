@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_02z9y9n" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.7.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.14.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_02z9y9n" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.14.0">
   <bpmn:collaboration id="Collaboration_0xmqoob">
     <bpmn:participant id="Participant_00mjkbf" name="Mitarbeiter*innen (Demo)" processRef="Process_0fb5qsx" />
     <bpmn:participant id="Participant_03znewd" name="Vorgesetzte" processRef="Process_01miz16" />
@@ -92,6 +92,8 @@
         <bpmn:flowNodeRef>Gateway_13gwmke</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0b8quuo</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_17vmj8r</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_1dy0hi5</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_0mso43s</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_1n7jb5b" name="John">
         <bpmn:flowNodeRef>Activity_05js9i8</bpmn:flowNodeRef>
@@ -111,7 +113,6 @@
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:sequenceFlow id="Flow_18yocwm" sourceRef="Event_0fpudpe" targetRef="Activity_11a57rq" />
-    <bpmn:sequenceFlow id="Flow_0fnxvng" sourceRef="Gateway_13gwmke" targetRef="Activity_17vmj8r" />
     <bpmn:sequenceFlow id="Flow_0haqjps" sourceRef="Activity_0b8quuo" targetRef="Event_1nn352a" />
     <bpmn:sequenceFlow id="Flow_0sf3792" name="Anzahl Resttage nicht ausreichend" sourceRef="Gateway_13gwmke" targetRef="Activity_0b8quuo">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${MITARBEITER_RESTURLAUB&lt;0}</bpmn:conditionExpression>
@@ -219,20 +220,36 @@
     <bpmn:endEvent id="Event_1vwr1vr">
       <bpmn:incoming>Flow_08myrk2</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:exclusiveGateway id="Gateway_13gwmke" default="Flow_0fnxvng">
+    <bpmn:exclusiveGateway id="Gateway_13gwmke" default="Flow_0t5bdv6">
       <bpmn:incoming>Flow_0h9p830</bpmn:incoming>
-      <bpmn:outgoing>Flow_0fnxvng</bpmn:outgoing>
       <bpmn:outgoing>Flow_0sf3792</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0t5bdv6</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sendTask id="Activity_0b8quuo" name="Informiere Mitarbeiter über Ablehnung" camunda:asyncBefore="true" camunda:class="de.ostfalia.bips.ws21.start.data.SendVacationRequestDataDeclined">
       <bpmn:incoming>Flow_0sf3792</bpmn:incoming>
+      <bpmn:incoming>Flow_1f8ro3o</bpmn:incoming>
       <bpmn:outgoing>Flow_0haqjps</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_0h9p830" sourceRef="Activity_11a57rq" targetRef="Gateway_13gwmke" />
     <bpmn:serviceTask id="Activity_17vmj8r" name="Prüfe Zeitraum auf kritischen Bereich" camunda:class="de.ostfalia.bips.ws21.start.data.CheckForCriticalArea">
-      <bpmn:incoming>Flow_0fnxvng</bpmn:incoming>
+      <bpmn:incoming>Flow_0f16sc5</bpmn:incoming>
       <bpmn:outgoing>Flow_05mejlf</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0t5bdv6" sourceRef="Gateway_13gwmke" targetRef="Activity_1dy0hi5" />
+    <bpmn:serviceTask id="Activity_1dy0hi5" name="Prüfe, ob Mitarbeiter in dem Zeitraum bereits Urlaub hat" camunda:class="de.ostfalia.bips.ws21.start.data.CheckForVacationOverlap">
+      <bpmn:incoming>Flow_0t5bdv6</bpmn:incoming>
+      <bpmn:outgoing>Flow_199wpdq</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_199wpdq" sourceRef="Activity_1dy0hi5" targetRef="Gateway_0mso43s" />
+    <bpmn:sequenceFlow id="Flow_0f16sc5" name="noch kein Urlaub" sourceRef="Gateway_0mso43s" targetRef="Activity_17vmj8r" />
+    <bpmn:exclusiveGateway id="Gateway_0mso43s" default="Flow_0f16sc5">
+      <bpmn:incoming>Flow_199wpdq</bpmn:incoming>
+      <bpmn:outgoing>Flow_0f16sc5</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1f8ro3o</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1f8ro3o" sourceRef="Gateway_0mso43s" targetRef="Activity_0b8quuo">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${ANTRAGS_STATUS=="abgelehnt"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmn:message id="Message_04n8h2u" name="Sende Urlaubsantragsdaten" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -447,7 +464,7 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_05mejlf_di" bpmnElement="Flow_05mejlf">
-        <di:waypoint x="700" y="550" />
+        <di:waypoint x="780" y="550" />
         <di:waypoint x="815" y="550" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0sf3792_di" bpmnElement="Flow_0sf3792">
@@ -461,14 +478,31 @@
         <di:waypoint x="700" y="450" />
         <di:waypoint x="832" y="450" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0fnxvng_di" bpmnElement="Flow_0fnxvng">
-        <di:waypoint x="490" y="475" />
-        <di:waypoint x="490" y="550" />
-        <di:waypoint x="600" y="550" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_18yocwm_di" bpmnElement="Flow_18yocwm">
         <di:waypoint x="248" y="450" />
         <di:waypoint x="300" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0t5bdv6_di" bpmnElement="Flow_0t5bdv6">
+        <di:waypoint x="490" y="475" />
+        <di:waypoint x="490" y="493" />
+        <di:waypoint x="400" y="493" />
+        <di:waypoint x="400" y="510" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_199wpdq_di" bpmnElement="Flow_199wpdq">
+        <di:waypoint x="490" y="550" />
+        <di:waypoint x="545" y="550" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0f16sc5_di" bpmnElement="Flow_0f16sc5">
+        <di:waypoint x="595" y="550" />
+        <di:waypoint x="680" y="550" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="596" y="532" width="84" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1f8ro3o_di" bpmnElement="Flow_1f8ro3o">
+        <di:waypoint x="570" y="525" />
+        <di:waypoint x="570" y="470" />
+        <di:waypoint x="600" y="470" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_11a57rq_di" bpmnElement="Activity_11a57rq">
         <dc:Bounds x="300" y="410" width="100" height="80" />
@@ -531,7 +565,13 @@
         <dc:Bounds x="600" y="410" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_17vmj8r_di" bpmnElement="Activity_17vmj8r">
-        <dc:Bounds x="600" y="510" width="100" height="80" />
+        <dc:Bounds x="680" y="510" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1whs9xo_di" bpmnElement="Activity_1dy0hi5">
+        <dc:Bounds x="390" y="510" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0mso43s_di" bpmnElement="Gateway_0mso43s" isMarkerVisible="true">
+        <dc:Bounds x="545" y="525" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_04vea84_di" bpmnElement="Flow_04vea84">
         <di:waypoint x="1270" y="189" />
