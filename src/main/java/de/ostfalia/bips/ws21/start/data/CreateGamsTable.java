@@ -33,6 +33,7 @@ public class CreateGamsTable implements JavaDelegate {
         LocalDate[] latestDay = {};
         String[] prioritaeten = {};
         int i = 0;
+        int j = 0;
               
         //Iterieren über die Prioritätsanträge
         while(resultSet.next()) {
@@ -68,5 +69,54 @@ public class CreateGamsTable implements JavaDelegate {
         Optional<List<LocalDate>> holidayList = Optional.of(CheckHolidays.holidayList()); 
         List<LocalDate> days = CountBusinessDays.countBusinessDaysBetween(minDate, maxDate, holidayList);
         
+        
+        String createquery = "CREATE TABLE gams ( " + "employee INTEGER NOT NULL";
+        	for (int k = 1; k < days.size() ; k++) {
+        		String day = "day"+k;
+        	    createquery += " , " + day + " INTEGER ";
+        	}
+        	createquery += ", PRIMARY KEY (employee));";
+        
+        
+        final CallableStatement statementCreateGams = connection.prepareCall(createquery); 
+        statementCreateGams.executeUpdate();
+        statementCreateGams.close();
+        
+        while (j<=i) {
+        	
+        	
+        	String sql = "INSERT INTO gams (employee";
+        	 for (int k = 1; k < days.size() ; k++) {
+         		String day = "day"+k;
+         		sql += " , " + day;
+         	 }
+        	 sql += ") VALUES(?";
+        	 for (int k = 1; k < days.size() ; k++) {
+          		sql += " ,?";
+          	 }
+        	 sql += ");";
+        	 
+             final CallableStatement statementInsert = connection.prepareCall(sql);
+             
+             statementInsert.setInt(1, employee[j]);
+             int firstday = days.indexOf(earliestDay[i]);
+             int lastday = days.indexOf(latestDay[i]);
+             
+             
+             String[] prioArrayEmployee = prioritaeten[j].split(",");
+             int counter=0;
+             
+             
+             for (int k = 2; k < days.size() ; k++) {
+            	 if (k < firstday || k > lastday) {
+            		 statementInsert.setInt(k, 0);
+            	 } else {
+            		 statementInsert.setInt(k, Integer.parseInt(prioArrayEmployee[counter]));
+            	 }
+           	 }
+             statementInsert.executeUpdate();
+             statementInsert.close();
+        }
+        connection.close();
     }
 }
