@@ -43,8 +43,8 @@ public class CreatePriorities implements JavaDelegate {
         final CallableStatement statement = connection.prepareCall(sql);
         statement.setInt(1, idAP);
         statement.setInt(2, (int) execution.getVariable("MITARBEITER_ID"));
-        statement.setInt(3, (int) execution.getVariable("NUM_DAYS_MIN"));
-        statement.setInt(4, (int) execution.getVariable("VACATION_DAYS"));
+        statement.setInt(3, Integer.parseInt((String) execution.getVariable("NUM_DAYS_MIN")));
+        statement.setInt(4, Integer.valueOf((String) execution.getVariable("VACATION_DAYS")));
         statement.setDate(5, java.sql.Date.valueOf(startDate));
         statement.setDate(6, java.sql.Date.valueOf(endDate));
         statement.setString(7, (String) execution.getVariable("PRIORITIES"));

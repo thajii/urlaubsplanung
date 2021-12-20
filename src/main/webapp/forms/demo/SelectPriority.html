@@ -1,4 +1,4 @@
-<form name="CheckTeamAvailability" role="form">
+<form name="SelectPriority" role="form">
     <div class="form-group">
         <label>Name</label>
         <input type="text"
@@ -23,20 +23,26 @@
                cam-variable-type="String"
                disabled/>
     </div>
-	<div class="form-group">
-        <label>Prioritaeten (0,1,2,3)</label>
-        <input type="date"
+    <div class="form-group">
+        <label>Ende-Datum</label>
+        <input type="text"
                class="form-control"
-               cam-variable-name="PRIORITIES"
+               cam-variable-name="VACATION_DAYS"
                cam-variable-type="String"
                disabled/>
     </div>
+	<div class="form-group">
+        <label>Prioritaeten (0,1,2,3)</label>
+        <input type="text"
+               class="form-control"
+               cam-variable-name="PRIORITIES"
+               cam-variable-type="String"/>
+    </div>
     <div class="form-group">
         <label>Minimalanzahl an Tagen</label>
-        <input type="date"
+        <input type="text"
                class="form-control"
                cam-variable-name="NUM_DAYS_MIN"
-               cam-variable-type="String"
-               disabled/>
+               cam-variable-type="String"/>
     </div>
 </form>
